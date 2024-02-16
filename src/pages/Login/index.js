@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import authService from "../../service/AuthService";
+import {redirect} from "react-router-dom";
 
 export default class Login extends Component {
     constructor(props) {
@@ -12,8 +13,7 @@ export default class Login extends Component {
     handleLogin = async (event) => {
         event.preventDefault();
         let data = {
-            email: this.state.email,
-            senha: this.state.senha
+            email: this.state.email, senha: this.state.senha, redirectTo: null
         }
         try {
             let res = await authService.authenticate(data)
@@ -22,6 +22,7 @@ export default class Login extends Component {
             } else {
                 console.log("res", res.data)
                 authService.setLoggedUser(res.data)
+                this.setState({redirectTo: "/best-games"})
             }
         } catch (error) {
             console.log(error)
@@ -31,6 +32,9 @@ export default class Login extends Component {
     }
 
     render() {
+        if (this.state.redirectTo) {
+            return redirect(this.state.redirectTo)
+        }
         return (<form onSubmit={this.handleLogin}>
             <h3>Login</h3>
 
