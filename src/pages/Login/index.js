@@ -1,14 +1,45 @@
 import React, {Component} from "react";
+import authService from "../../service/AuthService";
 
 export default class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "", senha: ""
+        }
+    }
+
+    handleLogin = async (event) => {
+        event.preventDefault();
+        let data = {
+            email: this.state.email,
+            senha: this.state.senha
+        }
+        try {
+            let res = await authService.authenticate(data)
+            if (!res) {
+                alert("Favor cadastrar user")
+            } else {
+                console.log("res", res.data)
+                authService.setLoggedUser(res.data)
+            }
+        } catch (error) {
+            console.log(error)
+            debugger
+            alert("Erro ao efetuar login.")
+        }
+    }
+
     render() {
-        return (<form>
+        return (<form onSubmit={this.handleLogin}>
             <h3>Login</h3>
 
             <div className="mb-3">
                 <label>Email</label>
                 <input
                     type="email"
+                    value={this.state.email}
+                    onChange={e => this.setState({email: e.target.value})}
                     className="form-control"
                     placeholder="Insira o email"
                 />
@@ -17,6 +48,8 @@ export default class Login extends Component {
                 <label>Senha</label>
                 <input
                     type="password"
+                    value={this.state.senha}
+                    onChange={e => this.setState({senha: e.target.value})}
                     className="form-control"
                     placeholder="Insira a senha"
                 />
