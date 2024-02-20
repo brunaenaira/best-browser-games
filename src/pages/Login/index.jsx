@@ -1,43 +1,41 @@
 import React, {Component} from "react";
 import authService from "../../service/AuthService";
-import {redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "", senha: ""
+            email: "", senha: "", loggedUSer: null
         }
     }
 
-    handleLogin = async (event) => {
+    handleLogin = (event) => {
         event.preventDefault();
         let data = {
-            email: this.state.email, senha: this.state.senha, redirectTo: null
+            email: this.state.email, senha: this.state.senha
         }
         try {
-            let res = await authService.authenticate(data)
+            let res = authService.authenticate(data)
             if (!res) {
                 alert("Favor cadastrar user")
             } else {
-                console.log("res", res.data)
-                authService.setLoggedUser(res.data)
-                this.setState({redirectTo: "/best-games"})
+                console.log("res", res)
+                authService.setLoggedUser(res[0])
+                this.setState({loggedUSer: authService.getLoggedUser()})
             }
         } catch (error) {
             console.log(error)
-            debugger
-            alert("Erro ao efetuar login.")
+            alert(`Erro ao efetuar login.${error}`)
         }
     }
 
     render() {
-        if (this.state.redirectTo) {
-            return redirect(this.state.redirectTo)
+        if (this.state.loggedUSer) {
+            return <Navigate to={"/best-games"}/>
         }
         return (<form onSubmit={this.handleLogin}>
             <h3>Login</h3>
-
             <div className="mb-3">
                 <label>Email</label>
                 <input
@@ -58,25 +56,12 @@ export default class Login extends Component {
                     placeholder="Insira a senha"
                 />
             </div>
-            {/*<div className="mb-3">*/}
-            {/*    <div className="custom-control custom-checkbox">*/}
-            {/*        <input*/}
-            {/*            type="checkbox"*/}
-            {/*            className="custom-control-input"*/}
-            {/*            id="customCheck1"*/}
-            {/*        />*/}
-            {/*        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
             <div className="d-grid">
                 <button type="submit" className="btn btn-primary">Enviar</button>
             </div>
             <p className="forgot-password text-right">
                 Não possui cadastro? <a href="/sign-up">Cadastre-se</a>
             </p>
-            {/*<p className="forgot-password text-right">*/}
-            {/*    Forgot <a href="#">password?</a>*/}
-            {/*</p>*/}
         </form>);
     }
 }

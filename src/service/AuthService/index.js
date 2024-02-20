@@ -1,5 +1,5 @@
 const AuthService = {
-    async authenticate(data) {
+    authenticate(data) {
         let users = JSON.parse(localStorage.getItem("users"));
         if (!data || !users) return null;
         try {
@@ -7,8 +7,9 @@ const AuthService = {
         } catch (error) {
             console.log(error)
             return null
+
         }
-    }, logout() {
+    }, logoff() {
         localStorage.setItem("loggedUser", null)
     }, // Função para salvar o usuário logado no local storage
     setLoggedUser(data) {

@@ -1,28 +1,36 @@
 import './App.css';
-import React from 'react';
-import {BrowserRouter, Link} from 'react-router-dom';
+import React, {Component} from 'react';
+import {BrowserRouter} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css"
 import RouterContainer from "./component/RouterContainer";
+import authService from "./service/AuthService";
 
-export default function App() {
-    return (<BrowserRouter>
-        <div className="App">
-            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-                <div className="container">
-                    <Link className="navbar-brand" to={'/sign-in'}>BBGames</Link>
-                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                        <ul className="navbar-nav ml-auto">
-                            <li className="nav-item"><Link className="nav-link" to={'/sign-in'}>Login</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to={'/sign-up'}>Sign up</Link></li>
-                        </ul>
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loggedUser: null
+        }
+    }
+
+    loadLoggedUser() {
+        let user = authService.getLoggedUser()
+        this.setState({loggedUser: user})
+    }
+
+    componentDidMount() {
+        this.loadLoggedUser()
+    }
+
+    render() {
+        return (<BrowserRouter>
+            <div className="App">
+                <div className="auth-wrapper">
+                    <div className="auth-inner">
+                        <RouterContainer loggedUser={this.state.loggedUser}/>
                     </div>
                 </div>
-            </nav>
-            <div className="auth-wrapper">
-                <div className="auth-inner">
-                    <RouterContainer/>
-                </div>
             </div>
-        </div>
-    </BrowserRouter>)
+        </BrowserRouter>)
+    }
 }
