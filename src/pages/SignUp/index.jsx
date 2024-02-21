@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import registerService from "../../service/RegisterService";
-import {redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 export default class SignUp extends Component {
     constructor(props) {
@@ -36,7 +36,7 @@ export default class SignUp extends Component {
 
     render() {
         if (this.state.redirectTo) {
-            return redirect(this.state.redirectTo)
+            return <Navigate to="/sign-in"/>
         }
         return (<form className="m-auto" onSubmit={this.handleRegister}>
             <h3>Cadastro</h3>

@@ -1,0 +1,8 @@
+.tableContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.container-box-home {
+    width: 100%;
+}
