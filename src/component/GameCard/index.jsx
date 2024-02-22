@@ -1,5 +1,6 @@
 import {Component} from "react";
 import Card from 'react-bootstrap/Card';
+import {Row} from "react-bootstrap";
 
 export default class GameCard extends Component {
     render() {
@@ -10,9 +11,14 @@ export default class GameCard extends Component {
                 <Card.Text>
                     {this.props.game.description}
                 </Card.Text>
-                <Card.Text>
-                    {this.props.game.category}
-                </Card.Text>
+                <Row>
+                    <Card.Text>
+                        {this.props.game.category}
+                    </Card.Text>
+                    <Card.Text>
+                        {this.props.game.year}
+                    </Card.Text>
+                </Row>
             </Card.Body>
         </Card>);
     }

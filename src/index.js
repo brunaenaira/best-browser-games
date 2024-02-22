@@ -4,6 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// const corsOption = {
+//     origin: ['http://localhost:3000'],
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+// }
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<React.StrictMode>
     {/*<BrowserRouter>*/}
