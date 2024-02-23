@@ -1,12 +1,12 @@
 import React, {Component} from "react";
-import authService from "../../service/AuthService";
+import AuthService from "../../service/AuthService";
 import {Navigate} from "react-router-dom";
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: "", senha: "", loggedUSer: null
+            email: "", senha: "", loggedUser: null
         }
     }
 
@@ -16,13 +16,13 @@ export default class Login extends Component {
             email: this.state.email, senha: this.state.senha
         }
         try {
-            let res = authService.authenticate(data)
+            let res = AuthService.authenticate(data)
             if (!res) {
                 alert("Favor cadastrar user")
             } else {
                 console.log("res", res)
-                authService.setLoggedUser(res[0])
-                this.setState({loggedUSer: authService.getLoggedUser()})
+                AuthService.setLoggedUser(res[0])
+                this.setState({loggedUSer: AuthService.getLoggedUser()})
             }
         } catch (error) {
             console.log(error)
@@ -30,8 +30,12 @@ export default class Login extends Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({loggedUser: AuthService.getLoggedUser()})
+    }
+
     render() {
-        if (this.state.loggedUSer) {
+        if (this.state.loggedUSer !== null) {
             return <Navigate to={"/best-games"}/>
         }
         return (<form onSubmit={this.handleLogin}>

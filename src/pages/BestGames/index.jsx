@@ -4,6 +4,7 @@ import GameCard from "../../component/GameCard"
 import "./style.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import {Col, Container, Row} from "react-bootstrap";
+import Api from "../../service/Api";
 
 export default class BestGames extends Component {
     constructor(props) {
