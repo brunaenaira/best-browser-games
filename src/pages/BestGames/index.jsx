@@ -3,19 +3,21 @@ import NavBar from "../../component/NavBar";
 import GameCard from "../../component/GameCard"
 import "./style.css"
 import "bootstrap/dist/css/bootstrap.min.css"
-import {Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Pagination, Row} from "react-bootstrap";
 import Api from "../../service/Api";
+import {forEach} from "react-bootstrap/ElementChildren";
+import {count} from "react-table/src/aggregations";
 
 export default class BestGames extends Component {
     constructor(props) {
         super(props);
-        this.state = {games: []}
+        this.state = {games: [], limit: 16, activePage: 1, prevPage: null, nextPage: null}
     }
 
-    componentDidMount() {
-        Api.get("/api/games")
+
+    handleCallApi(page) {
+        Api.get("/api/games", {params: {page: page}})
             .then(res => {
-                console.log(res.data)
                 const games = res.data.results.map(game => ({
                     id: game.id,
                     name: game.name,
@@ -23,42 +25,30 @@ export default class BestGames extends Component {
                     imageUrl: game.background_image,
                     year: game.released
                 }));
-                this.setState({games});
+                const count = Math.ceil(res.data.count / 16)
+                const prevPage = res.data.previous ? this.state.activePage - 1 : this.state.prevPage
+                const nextPage = res.data.next ? this.state.activePage + 1 : this.state.nextPage
+                this.setState({games, count, prevPage, nextPage})
             });
     }
 
-    // componentDidMount() {
-    //     Api.get("/api/games")
-    //         .then(res => {
-    //             console.log(res.data)
-    //             const games = res.data.results.map(game => ({
-    //                 id: game.guid,
-    //                 name: game.name,
-    //                 description: game.deck,
-    //                 imageUrl: game.image.thumb_url,
-    //                 year: game.expected_release_year
-    //             }));
-    //             this.setState({games});
-    //         });
-    // }
 
+    componentDidMount() {
+        this.handleCallApi(this.state.activePage)
+    }
 
-    // componentDidMount() {
-    //     const games = [];
-    //     for (let i = 0; i < 12; i++) {
-    //         games.push({
-    //             id: "3030-1",
-    //             name: "Desert Strike: Return to the Gulf",
-    //             description: "A top-down isometric helicopter shoot 'em up originally for the Sega Genesis, which was later ported to a variety of platforms. It is best known for its open-ended mission design and was followed by several sequels.",
-    //             category: "RPG",
-    //             imageUrl: "https://www.giantbomb.com/a/uploads/scale_avatar/9/93770/2370498-genesis_desertstrike_2__1_.jpg",
-    //             year: 1992
-    //         });
-    //     }
-    //     this.setState({games});
-    // }
+    pageClick(page) {
+        this.setState({activePage: page})
+        this.handleCallApi(this.state.activePage)
+    }
 
     render() {
+        let items = []
+        for (let page = this.state.activePage; page <= (this.state.count / 16) && page <= this.state.activePage + 8; page++) {
+            items.push(<Pagination.Item key={page} active={page === this.state.activePage} onClick={() => {
+                this.pageClick(page)
+            }}>{page}</Pagination.Item>)
+        }
         return (<>
             <NavBar loggedUser={this.props.loggedUser}/>
             <Container>
@@ -67,6 +57,28 @@ export default class BestGames extends Component {
                         <GameCard game={game}/>
                     </Col>))}
                 </Row>
-            </Container></>)
+                <Pagination className="justify-content-center">
+                    <Pagination.First onClick={() => {
+                        this.setState({activePage: 1})
+                    }}/>
+                    {items}
+                    <Pagination.Last onClick={() => {
+                        this.setState({activePage: this.state.count})
+                    }}/>
+                </Pagination>
+            </Container>
+        </>)
     }
+}
+{/*<Pagination.Prev onClick={() => {*/
+}
+{/*    this.setState({activePage: this.state.activePage === 1 ? this.state.activePage : this.state.activePage - 1})*/
+}
+{/*}}/>*/
+}
+{/*<Pagination.Next onClick={() => {*/
+}
+{/*    this.setState({activePage: this.state.activePage === this.state.count ? this.state.activePage : this.state.activePage + 1})*/
+}
+{/*}}/>*/
 }

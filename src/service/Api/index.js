@@ -19,7 +19,7 @@ const Api = axios.create({
         // "Access-Control-Allow-Methods": "POST,GET,OPTIONS, PUT, DELETE, OPTIONS",
         // "Access-Control-Allow-Headers": "Accept, X-Requested-With, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization",
     }, params: {
-        key: "482f15213ae14db5bc37a14e09cf02e1"
+        key: "482f15213ae14db5bc37a14e09cf02e1", page_size: 16
     }, responseType: "json"
 });
 
