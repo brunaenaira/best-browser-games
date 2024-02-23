@@ -12,6 +12,21 @@ export default class BestGames extends Component {
         this.state = {games: []}
     }
 
+    componentDidMount() {
+        Api.get("/api/games")
+            .then(res => {
+                console.log(res.data)
+                const games = res.data.results.map(game => ({
+                    id: game.id,
+                    name: game.name,
+                    description: game.genres[0].name,
+                    imageUrl: game.background_image,
+                    year: game.released
+                }));
+                this.setState({games});
+            });
+    }
+
     // componentDidMount() {
     //     Api.get("/api/games")
     //         .then(res => {
@@ -28,20 +43,20 @@ export default class BestGames extends Component {
     // }
 
 
-    componentDidMount() {
-        const games = [];
-        for (let i = 0; i < 12; i++) {
-            games.push({
-                id: "3030-1",
-                name: "Desert Strike: Return to the Gulf",
-                description: "A top-down isometric helicopter shoot 'em up originally for the Sega Genesis, which was later ported to a variety of platforms. It is best known for its open-ended mission design and was followed by several sequels.",
-                category: "RPG",
-                imageUrl: "https://www.giantbomb.com/a/uploads/scale_avatar/9/93770/2370498-genesis_desertstrike_2__1_.jpg",
-                year: 1992
-            });
-        }
-        this.setState({games});
-    }
+    // componentDidMount() {
+    //     const games = [];
+    //     for (let i = 0; i < 12; i++) {
+    //         games.push({
+    //             id: "3030-1",
+    //             name: "Desert Strike: Return to the Gulf",
+    //             description: "A top-down isometric helicopter shoot 'em up originally for the Sega Genesis, which was later ported to a variety of platforms. It is best known for its open-ended mission design and was followed by several sequels.",
+    //             category: "RPG",
+    //             imageUrl: "https://www.giantbomb.com/a/uploads/scale_avatar/9/93770/2370498-genesis_desertstrike_2__1_.jpg",
+    //             year: 1992
+    //         });
+    //     }
+    //     this.setState({games});
+    // }
 
     render() {
         return (<div className="container-box-home">
