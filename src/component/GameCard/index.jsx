@@ -1,10 +1,11 @@
 import {Component} from "react";
 import Card from 'react-bootstrap/Card';
 import {Row} from "react-bootstrap";
+import './style.css'
 
 export default class GameCard extends Component {
     render() {
-        return (<Card style={{width: '18rem'}}>
+        return (<Card className="card-game">
             <Card.Img variant="top" src={this.props.game.imageUrl}/>
             <Card.Body>
                 <Card.Title>{this.props.game.name}</Card.Title>

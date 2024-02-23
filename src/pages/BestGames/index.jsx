@@ -59,14 +59,14 @@ export default class BestGames extends Component {
     // }
 
     render() {
-        return (<div className="container-box-home">
+        return (<>
             <NavBar loggedUser={this.props.loggedUser}/>
-            <Container className="container container-fluid">
-                <Row>
-                    {this.state.games.map((game, k) => (<Col key={k} xs={48} md={4} lg={3}>
+            <Container>
+                <Row className="container-box-flex">
+                    {this.state.games.map((game, k) => (<Col key={k} xs={60} md={4} lg={3}>
                         <GameCard game={game}/>
                     </Col>))}
                 </Row>
-            </Container></div>)
+            </Container></>)
     }
 }
